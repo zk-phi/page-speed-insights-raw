@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Speed Insights</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="vue-2.5.16.min.js"></script>
+  </head>
+
+  <body class="container">
+    <div id="app">
+
+      URL:
+      <input v-model="url">
+      <label><input type="radio" v-model="strategy" value="mobile"> Mobile</label>
+      <label><input type="radio" v-model="strategy" value="desktop"> Desktop</label>
+      <button @click="run" :disabled="loading">Run</button>
+      <span>{{ status }}</span>
+
+      <h1>Speed Insights</h1>
+
+      <div v-if="result">
+
+        <h2>Diagnostics</h2>
+        <pre>{{ result.lighthouseResult.audits.diagnostics.details.items[0] }}</pre>
+
+        <h2>Metrics</h2>
+        <pre>{{ result.lighthouseResult.audits.metrics.details.items[0] }}</pre>
+
+        <h2>Bootup time</h2>
+        <pre>{{ result.lighthouseResult.audits["bootup-time"].details.items }}</pre>
+
+        <h2>Critical Request chains</h2>
+        <pre>{{ result.lighthouseResult.audits["critical-request-chains"].details.chains }}</pre>
+
+        <h2>DOM Size</h2>
+        <pre>{{ result.lighthouseResult.audits["dom-size"].details.items }}</pre>
+
+        <h2>Largest Contentful Element</h2>
+        <pre>{{ result.lighthouseResult.audits["largest-contentful-paint-element"].details.items[0] }}</pre>
+
+        <h2>Layout Shift Elements</h2>
+        <pre>{{ result.lighthouseResult.audits["layout-shift-elements"].details.items }}</pre>
+
+        <h2>Long Tasks</h2>
+        <pre v-if="result.lighthouseResult.audits['long-tasks'].scoreDisplayMode == 'notApplicable'">N/A</pre>
+        <pre v-else>{{ result.lighthouseResult.audits["long-tasks"] }}</pre>
+
+        <h2>Main-thread Tasks</h2>
+        <pre>{{ result.lighthouseResult.audits["main-thread-tasks"].details.items }}</pre>
+
+        <h2>Main-thread Work Breakdown</h2>
+        <pre>{{ result.lighthouseResult.audits["mainthread-work-breakdown"].details.items }}</pre>
+
+        <h2>Network Requests</h2>
+        <pre>{{ result.lighthouseResult.audits["network-requests"].details.items }}</pre>
+
+        <h2>Render-blocking Resources</h2>
+        <pre>{{ result.lighthouseResult.audits["render-blocking-resources"].details.items }}</pre>
+
+        <h2>Thumbnails</h2>
+        <span v-for="item in result.lighthouseResult.audits['screenshot-thumbnails'].details.items">
+          {{ item.timing }}
+          <img :src="item.data" />
+        </span>
+
+      </div>
+    </div>
+
+    <script src="main.js"></script>
+  </body>
+
+</html>
