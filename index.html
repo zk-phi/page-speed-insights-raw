@@ -23,45 +23,60 @@
 
       <div v-if="result">
 
-        <h2>Diagnostics</h2>
-        <pre>{{ result.lighthouseResult.audits.diagnostics.details.items[0] }}</pre>
+        <h2>Summary</h2>
 
-        <h2>Metrics</h2>
-        <pre>{{ result.lighthouseResult.audits.metrics.details.items[0] }}</pre>
+        <h3>Timings (simulated)</h3>
+        <div v-for="timing in simulatedTimings">
+          {{ timing.time }} ({{ timing.key }})
+        </div>
 
-        <h2>Bootup time</h2>
-        <pre>{{ result.lighthouseResult.audits["bootup-time"].details.items }}</pre>
+        <h3>Timings (observed)</h3>
+        <div v-for="timing in observedTimings">
+          <span v-if="timing.key">{{ timing.time }} ({{ timing.key }})</span>
+          <span v-else><img :src="timing.img"></span>
+        </div>
 
-        <h2>Critical Request chains</h2>
-        <pre>{{ result.lighthouseResult.audits["critical-request-chains"].details.chains }}</pre>
+        <h2>Raw Results</h2>
 
-        <h2>DOM Size</h2>
-        <pre>{{ result.lighthouseResult.audits["dom-size"].details.items }}</pre>
+        <h3>Diagnostics</h3>
+        <pre>{{ result.audits.diagnostics.details.items[0] }}</pre>
 
-        <h2>Largest Contentful Element</h2>
-        <pre>{{ result.lighthouseResult.audits["largest-contentful-paint-element"].details.items[0] }}</pre>
+        <h3>Metrics</h3>
+        <pre>{{ result.audits.metrics.details.items[0] }}</pre>
 
-        <h2>Layout Shift Elements</h2>
-        <pre>{{ result.lighthouseResult.audits["layout-shift-elements"].details.items }}</pre>
+        <h3>Bootup time</h3>
+        <pre>{{ result.audits["bootup-time"].details.items }}</pre>
 
-        <h2>Long Tasks</h2>
-        <pre v-if="result.lighthouseResult.audits['long-tasks'].scoreDisplayMode == 'notApplicable'">N/A</pre>
-        <pre v-else>{{ result.lighthouseResult.audits["long-tasks"] }}</pre>
+        <h3>Critical Request chains</h3>
+        <pre>{{ result.audits["critical-request-chains"].details.chains }}</pre>
 
-        <h2>Main-thread Tasks</h2>
-        <pre>{{ result.lighthouseResult.audits["main-thread-tasks"].details.items }}</pre>
+        <h3>DOM Size</h3>
+        <pre>{{ result.audits["dom-size"].details.items }}</pre>
 
-        <h2>Main-thread Work Breakdown</h2>
-        <pre>{{ result.lighthouseResult.audits["mainthread-work-breakdown"].details.items }}</pre>
+        <h3>Largest Contentful Element</h3>
+        <pre>{{ result.audits["largest-contentful-paint-element"].details.items[0] }}</pre>
 
-        <h2>Network Requests</h2>
-        <pre>{{ result.lighthouseResult.audits["network-requests"].details.items }}</pre>
+        <h3>Layout Shift Elements</h3>
+        <pre>{{ result.audits["layout-shift-elements"].details.items }}</pre>
 
-        <h2>Render-blocking Resources</h2>
-        <pre>{{ result.lighthouseResult.audits["render-blocking-resources"].details.items }}</pre>
+        <h3>Long Tasks</h3>
+        <pre v-if="result.audits['long-tasks'].scoreDisplayMode == 'notApplicable'">N/A</pre>
+        <pre v-else>{{ result.audits["long-tasks"] }}</pre>
 
-        <h2>Thumbnails</h2>
-        <span v-for="item in result.lighthouseResult.audits['screenshot-thumbnails'].details.items">
+        <h3>Main-thread Tasks</h3>
+        <pre>{{ result.audits["main-thread-tasks"].details.items }}</pre>
+
+        <h3>Main-thread Work Breakdown</h3>
+        <pre>{{ result.audits["mainthread-work-breakdown"].details.items }}</pre>
+
+        <h3>Network Requests</h3>
+        <pre>{{ result.audits["network-requests"].details.items }}</pre>
+
+        <h3>Render-blocking Resources</h3>
+        <pre>{{ result.audits["render-blocking-resources"].details.items }}</pre>
+
+        <h3>Thumbnails</h3>
+        <span v-for="item in result.audits['screenshot-thumbnails'].details.items">
           {{ item.timing }}
           <img :src="item.data" />
         </span>
