@@ -12,12 +12,28 @@
   <body class="container">
     <div id="app">
 
-      URL:
-      <input v-model="url">
-      <label><input type="radio" v-model="strategy" value="mobile"> Mobile</label>
-      <label><input type="radio" v-model="strategy" value="desktop"> Desktop</label>
-      <button @click="run" :disabled="loading">Run</button>
-      <span>{{ status }}</span>
+      <p>
+        Mode:
+        <label><input type="radio" v-model="mode" value="api"> Speed Insights API</label>
+        <label><input type="radio" v-model="mode" value="json"> Load JSON</label>
+      </p>
+
+      <p v-if="mode == 'api'">
+        URL:
+        <input v-model="url">
+        <label><input type="radio" v-model="strategy" value="mobile"> Mobile</label>
+        <label><input type="radio" v-model="strategy" value="desktop"> Desktop</label>
+      </p>
+
+      <p v-if="mode == 'json'">
+        JSON URL:
+        <input v-model="jsonUrl">
+      </p>
+
+      <p>
+        <button @click="run" :disabled="loading">Run</button>
+        <span>{{ status }}</span>
+      </p>
 
       <h1>Speed Insights</h1>
 
@@ -61,7 +77,7 @@
 
         <h3>Long Tasks</h3>
         <pre v-if="result.audits['long-tasks'].scoreDisplayMode == 'notApplicable'">N/A</pre>
-        <pre v-else>{{ result.audits["long-tasks"] }}</pre>
+        <pre v-else>{{ result.audits["long-tasks"].details.items }}</pre>
 
         <h3>Main-thread Tasks</h3>
         <pre>{{ result.audits["main-thread-tasks"].details.items }}</pre>

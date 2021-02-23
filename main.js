@@ -52,6 +52,17 @@ function observedTimings (lighthouseResult) {
         });
     });
 
+    lighthouseResult.audits["long-tasks"].details.items.forEach((item) => {
+        timings.push({
+            time: item.startTime,
+            key: `longTaskStart ${item.url}`,
+        });
+        timings.push({
+            time: item.startTime + item.duration,
+            key: `longTaskEnd ${item.url}`,
+        });
+    });
+
     return timings.sort((a, b) =>
         a.time <= b.time ? -1 : a.time == b.time ? 0 : 1
     );
@@ -60,7 +71,9 @@ function observedTimings (lighthouseResult) {
 var vm = new Vue({
     el: "#app",
     data: {
+        mode: "api",
         url: "https://zk-phi.github.io/",
+        jsonUrl: "res.json",
         strategy: "mobile",
         status: "",
         result: null,
@@ -76,14 +89,16 @@ var vm = new Vue({
     },
     methods: {
         run: function () {
-            var xhr = new XMLHttpRequest();
-            var url = (
+            var mode = this.mode;
+            var url = mode == "json" ? this.jsonUrl : (
                 "https://www.googleapis.com/pagespeedonline/v5/runPagespeed" +
                 "?url=" + this.url +
                 "&strategy=" + this.strategy
             );
+            var xhr = new XMLHttpRequest();
             xhr.onload = function () {
-                vm.result = JSON.parse(xhr.responseText).lighthouseResult;
+                var json = JSON.parse(xhr.responseText);
+                vm.result = mode == "json" ? json : json.lighthouseResult;
                 vm.status = "Completed";
                 vm.loading = false;
             };
